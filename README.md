@@ -1,21 +1,11 @@
 # Toybox
 
-**TODO: Add description**
+A box of toys to play with Riak data.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `toybox` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:toybox, "~> 0.1.0"}
-  ]
-end
+```shell
+$ git pull
+$ mix deps.get
+$ mix deps.compile
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/toybox](https://hexdocs.pm/toybox).
-
