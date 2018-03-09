@@ -1,18 +1,13 @@
 defmodule Toybox do
   @moduledoc """
-  Documentation for Toybox.
+  Provide tools to create KV and CS objects quickly.
   """
 
   @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Toybox.hello
-      :world
+  Print usage
 
   """
-  def hello do
-    :world
+  def usage do
+    "A group of functions meant to be used inside of iex."
   end
 end
