@@ -22,7 +22,7 @@ defmodule Toybox.MixProject do
   defp deps do
     [
       # {:dep_from_hexpm, "~> 0.3.0"},
-      {:erlcloud, "~> 3.0.0"},
+      {:erlcloud, git: "https://github.com/basho/erlcloud.git"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       {:riakc, "~> 2.5.0"}
     ]
