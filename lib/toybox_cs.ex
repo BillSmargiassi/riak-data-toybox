@@ -8,15 +8,15 @@ defmodule Toybox.CS do
 		secret_key = get_env(:toybox, "aws_secret_access_key")
 		cs_proxy = get_env(:toybox, "cs_proxy_host")
 		cs_port = get_env(:toybox, "cs_proxy_port")
-		:ok = :erlcloud_s3.configure(access_key, secret_key, cs_proxy, cs_port)
+		:ok = :erlcloud_s3.configure(access_key, secret_key, 's3.smazonaws.com', 8080, 'http', cs_proxy, cs_port, [])
 	end
 
 	def put(bucket, key, value) do
-		:erlcloud.put_object(bucket, key, value)
+		:erlcloud_s3.put_object(bucket, key, value)
 	end
 
 	def make_bucket(bucket) do
-		:erlcloud.create_bucket(bucket)
+		:erlcloud_s3.create_bucket(bucket)
 	end
 
 	def fill_bucket(bucket, data) do
