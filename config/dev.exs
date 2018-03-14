@@ -1,4 +1,4 @@
-use Mix.config
+use Mix.Config
 
 config :toybox,
   aws_access_key_id: "",
