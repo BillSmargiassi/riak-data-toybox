@@ -19,7 +19,36 @@ defmodule Toybox.CS do
 		:erlcloud_s3.create_bucket(bucket)
 	end
 
-	def fill_bucket(bucket, data) do
-		:ok
+	defp path_name(n, type) when is_integer(n) and is_list(type) do
+		type ++ (n |> Integer.to_charlist)
+	end
+	
+	defp file_name(n) when is_integer(n) do
+		path_name(n, 'file')
+	end
+
+	defp bucket_name(n) when is_integer(n) do
+		path_name(n, 'test')
+	end
+
+	def fill_bucket(bucket, count, fun) when is_function(fun) do
+		make_bucket(bucket)
+		fill_bucket_files(bucket, count, 1, fun)
+	end
+
+	defp fill_bucket_files(bucket, count, acc, fun) when acc < count do
+		put(bucket, file_name(acc), (fun.()))
+		fill_bucket_files(bucket, count, acc + 1, fun)
+	end
+	defp fill_bucket_files(bucket, count, acc, fun) when acc >= count do
+		put(bucket, file_name(acc), (fun.()))
+	end
+
+	def fill_data(bucket, end_bucket, object_count, fun) when bucket < end_bucket do
+		fill_bucket(bucket_name(bucket), object_count, fun)
+		fill_data(bucket + 1, end_bucket, object_count, fun)
+	end
+	def fill_data(bucket, _end_bucket, object_count, fun) do
+		fill_bucket(bucket_name(bucket), object_count, fun)
 	end
 end
