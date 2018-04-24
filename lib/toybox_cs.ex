@@ -20,7 +20,7 @@ defmodule Toybox.CS do
 	end
 
 	defp path_name(n, type) when is_integer(n) and is_list(type) do
-		type ++ (n |> Integer.to_charlist)
+		type ++ Integer.to_charlist(n)
 	end
 	
 	defp file_name(n) when is_integer(n) do
