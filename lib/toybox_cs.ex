@@ -1,4 +1,6 @@
 defmodule Toybox.CS do
+	require Logger
+
 	def get_env(app, var) do
 		System.get_env(var) || Application.get_env(app, String.to_atom(var))
 	end
@@ -15,8 +17,20 @@ defmodule Toybox.CS do
 		:erlcloud_s3.put_object(bucket, key, value)
 	end
 
+	# This is a little weird, because it pretends that the return is a key/value list, which it sort of is
+	def bucket_exists(search) do
+		# Puts a list of names of the existing buckets in 'bucketlist'
+		bucketlist = :erlcloud_s3.list_buckets() |> Keyword.get(:buckets) |> List.flatten |> Keyword.get_values(:name)
+		:lists.member(search, bucketlist)
+	end
+
 	def make_bucket(bucket) do
-		:erlcloud_s3.create_bucket(bucket)
+		if bucket_exists(bucket) do
+			Logger.error("make_bucket: Bucket #{bucket} already exists!")
+			{:error, 'Bucket #{bucket} exists'}
+		else 
+			:erlcloud_s3.create_bucket(bucket)		
+		end
 	end
 
 	defp path_name(n, type) when is_integer(n) and is_list(type) do
@@ -30,10 +44,13 @@ defmodule Toybox.CS do
 	defp bucket_name(n) when is_integer(n) do
 		path_name(n, 'test')
 	end
-
+	
 	def fill_bucket(bucket, count, fun) when is_function(fun) do
-		make_bucket(bucket)
-		fill_bucket_files(bucket, count, 1, fun)
+		case make_bucket(bucket) do
+			:ok -> fill_bucket_files(bucket, count, 1, fun)
+			{:error, msg} -> Logger.error("Aborting fill_bucket: #{msg}")
+				{:error, msg}
+		end
 	end
 
 	defp fill_bucket_files(bucket, count, acc, fun) when acc < count do
