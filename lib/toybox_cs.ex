@@ -18,10 +18,12 @@ defmodule Toybox.CS do
 	end
 
 	# This is a little weird, because it pretends that the return is a key/value list, which it sort of is
+	def get_bucket_names() do
+		:erlcloud_s3.list_buckets() |> Keyword.get(:buckets) |> List.flatten |> Keyword.get_values(:name)
+	end
+
 	def bucket_exists(search) do
-		# Puts a list of names of the existing buckets in 'bucketlist'
-		bucketlist = :erlcloud_s3.list_buckets() |> Keyword.get(:buckets) |> List.flatten |> Keyword.get_values(:name)
-		:lists.member(search, bucketlist)
+		:lists.member(search, get_bucket_names())
 	end
 
 	def make_bucket(bucket) do
