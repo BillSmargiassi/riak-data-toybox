@@ -35,18 +35,16 @@ defmodule Toybox.CS do
 		end
 	end
 
-	defp path_name(n, type) when is_integer(n) and is_list(type) do
-		type ++ Integer.to_charlist(n)
+	defp path_name(n, :file) when is_integer(n) and is_atom(type) do
+	    'file' ++ Integer.to_charlist(n)
 	end
-	
-	defp file_name(n) when is_integer(n) do
-		path_name(n, 'file')
+	defp path_name(n, :bucket) when is_integer(n) and is_atom(type) do
+	    'test' ++ Integer.to_charlist(n)
 	end
-
-	defp bucket_name(n) when is_integer(n) do
-		path_name(n, 'test')
+	defp path_name(n, _type) when is_integer(n) and is_atom(_type) do
+        {:error, 'type must be :bucket or :file'}
 	end
-	
+		
 	def fill_bucket(bucket, count, fun) when is_function(fun) do
 		case make_bucket(bucket) do
 			:ok -> fill_bucket_files(bucket, count, 1, fun)
@@ -56,18 +54,18 @@ defmodule Toybox.CS do
 	end
 
 	defp fill_bucket_files(bucket, count, acc, fun) when acc < count do
-		put(bucket, file_name(acc), (fun.()))
+		put(bucket, path_name(acc, :file), (fun.()))
 		fill_bucket_files(bucket, count, acc + 1, fun)
 	end
 	defp fill_bucket_files(bucket, count, acc, fun) when acc >= count do
-		put(bucket, file_name(acc), (fun.()))
+		put(bucket, path_name(acc, :file), (fun.()))
 	end
 
 	def fill_data(bucket, end_bucket, object_count, fun) when bucket < end_bucket do
-		fill_bucket(bucket_name(bucket), object_count, fun)
+		fill_bucket(path_name(bucket, :bucket), object_count, fun)
 		fill_data(bucket + 1, end_bucket, object_count, fun)
 	end
 	def fill_data(bucket, _end_bucket, object_count, fun) do
-		fill_bucket(bucket_name(bucket), object_count, fun)
+		fill_bucket(path_name(bucket, :bucket), object_count, fun)
 	end
 end
