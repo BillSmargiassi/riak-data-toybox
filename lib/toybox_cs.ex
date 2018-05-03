@@ -5,7 +5,9 @@ defmodule Toybox.CS do
 		System.get_env(var) || Application.get_env(app, String.to_atom(var))
 	end
 
-	def configure_erlcloud do
+  # Configure connection to CS
+  # Currently using erlcloud
+	def configure do
 		access_key = get_env(:toybox, "aws_access_key_id") |> String.to_charlist
 		secret_key = get_env(:toybox, "aws_secret_access_key") |> String.to_charlist
 		cs_proxy = get_env(:toybox, "cs_proxy_host") |> String.to_charlist
