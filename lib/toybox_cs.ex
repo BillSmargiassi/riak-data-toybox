@@ -1,12 +1,30 @@
 defmodule Toybox.CS do
+	@moduledoc """
+	Provide tools to create CS test objects quickly.
+	"""
+
 	require Logger
+
+	@doc """
+ 	Print usage
+
+ 	"""
+ 	def usage do
+    	"""A group of functions meant to be used inside of iex.
+    	configure/0			- Configure the connection to CS
+    	get_bucket_names/0	- Return a list of bucket names
+    	put/3				- Put data in s3://bucket/key
+    	bucket_exists/1		- Return true if the bucket exists
+    	fill_data/4			- Make a numbered set of buckets with a number of objects filled with a fun's output
+    	"""
+	end
 
 	def get_env(app, var) do
 		System.get_env(var) || Application.get_env(app, String.to_atom(var))
 	end
 
-  # Configure connection to CS
-  # Currently using erlcloud
+	# Configure connection to CS
+	# Currently using erlcloud
 	def configure do
 		access_key = get_env(:toybox, "aws_access_key_id") |> String.to_charlist
 		secret_key = get_env(:toybox, "aws_secret_access_key") |> String.to_charlist
