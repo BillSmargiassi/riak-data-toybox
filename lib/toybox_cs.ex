@@ -19,17 +19,13 @@ defmodule Toybox.CS do
     	"""
 	end
 
-	def get_env(app, var) do
-		System.get_env(var) || Application.get_env(app, String.to_atom(var))
-	end
-
 	# Configure connection to CS
 	# Currently using erlcloud
 	def configure do
-		access_key = get_env(:toybox, "aws_access_key_id") |> String.to_charlist
-		secret_key = get_env(:toybox, "aws_secret_access_key") |> String.to_charlist
-		cs_proxy = get_env(:toybox, "cs_proxy_host") |> String.to_charlist
-		cs_port = get_env(:toybox, "cs_proxy_port")
+		access_key = Toybox.get_env(:toybox, "aws_access_key_id") |> String.to_charlist
+		secret_key = Toybox.get_env(:toybox, "aws_secret_access_key") |> String.to_charlist
+		cs_proxy = Toybox.get_env(:toybox, "cs_proxy_host") |> String.to_charlist
+		cs_port = Toybox.get_env(:toybox, "cs_proxy_port")
 		:ok = :erlcloud_s3.configure(access_key, secret_key, 's3.amazonaws.com', 8080, 'http', cs_proxy, cs_port, [])
 	end
 
